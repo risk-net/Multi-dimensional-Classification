@@ -1,95 +1,138 @@
-### Multi-dimensional Classification of AI Risk Incidents
+# Multi-dimensional Classification of AI Risk Events
 
-[[查看中文版]](README_zh-CN.md)
 
-## Overview
+## Overview  
+This section focuses on the multi-dimensional classification of AI risk events, with the core goal of establishing a unified classification system (RiskNet Taxonomy) and a benchmark dataset, as well as implementing model evaluation through code. It emphasizes comparing the performance of prompt-based reasoning and fine-tuned large language models (LLMs) in multi-dimensional classification tasks, providing technical support for the structured analysis of AI risk events.
 
-This section focuses on the multi-dimensional classification of AI risk incidents, aiming to establish a unified classification system (RiskNet Taxonomy) and benchmark dataset, as well as provide code implementations for model evaluation. The core goal is to compare the performance of prompt-based inference and fine-tuned Large Language Models (LLMs) in multi-dimensional classification tasks, offering technical support for the structured analysis of AI risk incidents.
 
-## Project Structure and File Description
+## Project Structure and File Description  
 ```
 Multi-dimensional-Classification/
-├── README.md                    # This document 
-├── README_zh-CN.md             # (Chinese version)
+├── README.md                    # English version description
+├── README_zh-CN.md             # Chinese version description (this document)
 ├── data/
-│   ├── classification_result/   # Model classification results
-│   ├── evaluation_result/       # Evaluation reports
-│   └── fine-tuning-data/       # SFT training dataset
+│   ├── classification_result/   # Model classification results (JSON format)
+│   ├── evaluation_result/       # Evaluation reports (TXT format)
+│   └── fine-tuning-data/        # SFT training dataset and configuration files
+│       ├── config/              # Fine-tuning configuration files
+│       ├── train_set.json       # Training set
+│       ├── test_set.json        # Validation set
+│       └── data_set_builder.ipynb  # Dataset construction script
 └── src/
-    └── evalution.py            # Evaluation script
+    └── evalution.py            # Core evaluation script
 ```
 
-## 🔧 Installation & Setup
 
-### Prerequisites
+## 🔧 Installation and Setup  
 
-- Python 3.7 or higher
-- Required packages (see requirements.txt)
+### Prerequisites  
+- Python 3.7 or higher  
+- Required dependency packages (see requirements.txt for details)  
 
-### Installation Steps
 
+### Installation Steps  
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone <repository URL>
 cd Multi-dimensional-Classification
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-## 📊 Data Structure
 
-### 1. Classification Results (`data/classification_result/`)
+## 📊 Data Structure  
 
-This folder stores classification results from different models in JSON format. Each file corresponds to the prediction outputs of a specific model on the test set, with the following details:
+### 1. Classification Results (`data/classification_result/`)  
+This folder stores classification results of different models (in JSON format). Each file corresponds to the prediction output of a specific model on the test set, with the following details:  
 
-- **File naming format**: `<model_name>.json` (e.g., `qwen3-14B-sft.json`, `kimi-k2-prompt.json`)
-- **Content**: List of dictionaries, each containing two key-value pairs:
-  - `label`: Ground truth annotations, including single-label tasks (entity, intent, timing, EU AI Act risk level) and multi-label tasks (domain classification with main/sub-domains)
-  - `predict`: Model prediction results, in the same format as `label`
-- **Purpose**: Serves as input for the evaluation script to calculate various performance metrics
-- **Available models**:
-  - `qwen3-14B.json` - Qwen3 14B base model
-  - `qwen3-14B-sft.json` - Qwen3 14B fine-tuned model
-  - `qwen3-32B.json` - Qwen3 32B base model
-  - `qwen3-32B-sft.json` - Qwen3 32B fine-tuned model
-  - `kimi-k2-prompt.json` - Kimi K2 prompt-based model
+- **File name format**: `<model name>.json` (e.g., `qwen3-14B-sft.json`, `kimi-k2-prompt.json`)  
+- **Content**: A list of dictionaries, each containing two key-value pairs:  
+  - `label`: Real annotations, including single-label tasks (entity, intent, time, EU AI Act risk level) and multi-label tasks (domain classification and its primary/sub-domains)  
+  - `predict`: Model prediction results, in the same format as `label`  
+- **Purpose**: Serves as input for the evaluation script to calculate various performance metrics  
+- **Available models**:  
+  - `qwen3-14B.json` - Qwen3 14B base model  
+  - `qwen3-14B-sft.json` - Qwen3 14B fine-tuned model  
+  - `qwen3-32B.json` - Qwen3 32B base model  
+  - `qwen3-32B-sft.json` - Qwen3 32B fine-tuned model  
+  - `kimi-k2-prompt.json` - Kimi K2 prompt-based model  
 
-### 2. Evaluation Results (`data/evaluation_result/`)
 
-This folder stores evaluation reports generated by the evaluation script in TXT format. Each file corresponds to the performance metrics of a specific model, including:
+### 2. Evaluation Results (`data/evaluation_result/`)  
+This folder stores evaluation reports generated by the evaluation script (in TXT format). Each file corresponds to the performance metrics of a specific model, including:  
 
-- **File naming format**: `<model_name>.txt` (consistent with model names in `classification_result`)
-- **Content**:
-  - Metrics for single-label tasks (accuracy, precision, recall, F1-score for entity, intent, timing, and risk level)
-  - Metrics for multi-label tasks (Hamming loss, micro/macro average accuracy, precision, recall, and F1-score for main and sub-domains)
+- **File name format**: `<model name>.txt` (consistent with model names in `classification_result`)  
+- **Content**:  
+  - Metrics for single-label tasks (accuracy, precision, recall, F1-score for entity, intent, time, and risk level)  
+  - Metrics for multi-label tasks (Hamming loss, micro-average/macro-average accuracy, precision, recall, F1-score for primary and sub-domains)  
 
-### 3. Fine-tuning Data (`data/fine-tuning-data/`)
 
-Contains datasets for model fine-tuning:
+### 3. Fine-tuning Data (`data/fine-tuning-data/`)  
+Contains datasets used for model fine-tuning, with the following details:  
 
-- **Data Source**: Top 5 representative news reports for each AI risk incident
-- **Processing Method**: Aggregated titles and abstracts into concise incident summaries
-- **Split Ratio**: 8:2 (training:validation)
-- **Format**: JSON with input-output pairs for supervised learning
-- **Purpose**: Provides high-quality supervised data for LLM fine-tuning, helping models learn risk-related patterns and improve classification accuracy.
+- **Data source**: Top 5 representative news reports for each AI risk event  
+- **Processing method**: Aggregating titles and summaries into concise event summaries  
+- **Split ratio**: 8:2 (training:validation)  
+- **Format**: JSON format of input-output pairs for supervised learning  
+- **Purpose**: Provide high-quality supervised data for LLM fine-tuning, helping the model learn risk-related patterns and improve classification accuracy  
 
-## 🚀 Usage
 
-### Running Evaluation
+## 🔧 Model Fine-tuning Process  
+This project uses LLamaFactory 0.9.4 for model fine-tuning (a comprehensive framework supporting multiple fine-tuning methods and model types). The specific steps are as follows:  
 
+1. **LLamaFactory Preparation**  
+   ```bash
+   # Clone the LLamaFactory repository
+   git clone https://github.com/hiyouga/LLaMA-Factory.git
+   cd LLaMA-Factory
+   git checkout v0.9.4  # Switch to version 0.9.4
+
+   # Install dependencies
+   pip install -r requirements.txt
+   ```  
+
+2. **Fine-tuning Data Preparation**  
+   Fine-tuning data needs to be converted into a format supported by LLamaFactory, as shown in the example below:  
+   ```json
+   [
+       {
+           "instruction": "Content of prompt",
+           "input": "",
+           "output": "Content of response"
+       },
+       ...
+   ]
+   ```  
+   For the dataset construction process, refer to `data/fine-tuning-data/data_set_builder.ipynb`.  
+   After completion, place `data/fine-tuning-data/train_set.json` into the `data` folder of LLamaFactory and add the corresponding configuration file in the `dataset-info` folder.  
+
+3. **Fine-tuning Configuration**  
+   Create the configuration file `data/fine-tuning-data/config/qwen3_lora_sft.yaml` and use it to perform fine-tuning.  
+
+Run fine-tuning: Use the following command to execute fine-tuning:
+   ```bash
+   llamafactory-cli train data/fine-tuning-data/config/qwen3_lora_sft.yaml
+   ``` 
+
+For any issues encountered during the process, refer to the official LLamaFactory documentation or seek help in relevant technical communities.
+
+
+## 🚀 Evaluation Usage  
+
+### Run Evaluation  
 ```python
 from src.evalution import evaluate_model
 
 # Evaluate a specific model
 evaluate_model("data/classification_result/qwen3-32B-sft.json", "qwen3-32B-sft")
-```
+```  
 
-### Evaluation Script Features
 
-The evaluation script (`src/evalution.py`) provides:
+### Evaluation Script Functions  
+The evaluation script (`src/evalution.py`) provides the following core functions:  
 
-- **Data Validation**: Checks validity of labels and predictions
-- **Comprehensive Metrics**: Calculates various performance indicators
-- **Multi-task Support**: Handles both single-label and multi-label classification
-- **Detailed Reporting**: Generates comprehensive evaluation reports
+- **Data validation**: Check the validity of labels and predictions  
+- **Comprehensive metrics**: Calculate various performance metrics (e.g., accuracy, F1-score, etc.)  
+- **Multi-task support**: Handle both single-label and multi-label classification tasks simultaneously  
+- **Detailed reporting**: Generate comprehensive evaluation reports containing various metrics
