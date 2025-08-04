@@ -89,7 +89,6 @@ This project uses LLamaFactory [https://github.com/hiyouga/LLaMA-Factory](https:
    # Clone the LLamaFactory repository
    git clone https://github.com/hiyouga/LLaMA-Factory.git
    cd LLaMA-Factory
-   git checkout v0.9.4  # Switch to version 0.9.4
 
    # Install dependencies
    pip install -r requirements.txt
