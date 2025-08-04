@@ -1,6 +1,6 @@
 # AI风险事件的多维分类
 
-
+[[View English Version]](README.md)
 ## 概述  
 本部分聚焦于AI风险事件的多维分类，核心目标是构建统一的分类体系（RiskNet Taxonomy）和基准数据集，并通过代码实现模型评估。重点对比基于提示词的推理与微调大语言模型（LLMs）在多维分类任务中的性能，为AI风险事件的结构化分析提供技术支撑。
 
@@ -56,7 +56,7 @@ pip install -r requirements.txt
   - `qwen3-14B-sft.json` - Qwen3 14B微调模型  
   - `qwen3-32B.json` - Qwen3 32B基础模型  
   - `qwen3-32B-sft.json` - Qwen3 32B微调模型  
-  - `kimi-k2-prompt.json` - Kimi K2基于提示词的模型  
+  - `kimi-k2-prompt.json` - Kimi K2基础模型  
 
 
 ### 2. 评估结果（`data/evaluation_result/`）  

@@ -1,5 +1,6 @@
 # Multi-dimensional Classification of AI Risk Events
 
+[[查看中文版本]](README_zh-CN.md)
 
 ## Overview  
 This section focuses on the multi-dimensional classification of AI risk events, with the core goal of establishing a unified classification system (RiskNet Taxonomy) and a benchmark dataset, as well as implementing model evaluation through code. It emphasizes comparing the performance of prompt-based reasoning and fine-tuned large language models (LLMs) in multi-dimensional classification tasks, providing technical support for the structured analysis of AI risk events.
@@ -56,7 +57,7 @@ This folder stores classification results of different models (in JSON format). 
   - `qwen3-14B-sft.json` - Qwen3 14B fine-tuned model  
   - `qwen3-32B.json` - Qwen3 32B base model  
   - `qwen3-32B-sft.json` - Qwen3 32B fine-tuned model  
-  - `kimi-k2-prompt.json` - Kimi K2 prompt-based model  
+  - `kimi-k2-prompt.json` - Kimi K2 base model  
 
 
 ### 2. Evaluation Results (`data/evaluation_result/`)  
